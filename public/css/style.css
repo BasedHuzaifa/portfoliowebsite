@@ -376,225 +376,356 @@ footer {
   }
 }
 
-/* Add these new media queries to your css/style.css file */
+/* --- Base Styles for Desktop (Default) --- */
+/* This section ensures desktop elements are visible and mobile ones are hidden by default */
 
+/* Ensure the desktop navbar is visible and correctly styled */
+.navbar {
+  display: flex; /* Default for desktop */
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.1); /* Slightly transparent for desktop */
+  backdrop-filter: blur(10px) saturate(180%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+}
+
+.navbar .nav-links {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+}
+
+.navbar .nav-links a {
+  color: var(--text);
+  text-decoration: none;
+  position: relative;
+  padding: 0.5rem;
+}
+
+.navbar .nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: all 0.3s;
+}
+
+.navbar .nav-links a:hover::after {
+  left: 0;
+  width: 100%;
+}
+
+.navbar .btn1 {
+  background: var(--accent);
+  color: #000;
+  padding: 1rem 2.5rem;
+  font-size: 1.4rem;
+  border-radius: 2rem;
+  text-decoration: none;
+  transition: background 0.3s;
+  position: relative;
+  left: -50px; /* Adjust as per your original desktop design */
+}
+
+/* Hide mobile-specific elements by default on desktop */
+.mobile-header,
+.hamburger,
+.mobile-nav-overlay,
+.overlay { /* Ensure overlay is hidden by default */
+  display: none;
+}
+
+
+/* --- Mobile-Specific Styles (max-width: 768px) --- */
 @media (max-width: 768px) {
-  /* General adjustments for screens up to 768px wide */
-  body {
-    padding-top: 50px; /* Adjust for fixed navbar on smaller screens */
-  }
-
+  /* Hide the original desktop navbar entirely on mobile */
   .navbar {
-    flex-direction: column;
-    padding: 1rem;
-    align-items: flex-start;
-    border-radius: 0; /* Remove rounded corners for full-width on mobile */
-    background: rgba(0, 0, 0, 0.9); /* Slightly more opaque background for readability */
+      display: none;
   }
 
-  .navbar .logo {
-    margin-bottom: 0.5rem;
+  /* Show the new mobile header (logo + hamburger) */
+  .mobile-header {
+      display: flex; /* Override display:none from desktop styles */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 1.5rem; /* Adjusted padding for less cornering */
+      /* Make background fully transparent or adjust as desired for no "bar" */
+      background: transparent; /* KEY CHANGE: Make header background transparent */
+      backdrop-filter: none; /* KEY CHANGE: Remove blur from header background */
+      -webkit-backdrop-filter: none; /* KEY CHANGE */
+      z-index: 100; /* Ensure it's above content and menu overlay */
+      justify-content: space-between; /* Space out logo and hamburger */
+      align-items: center;
   }
 
-  .nav-links {
-    flex-direction: column;
-    width: 100%;
-    gap: 0.5rem;
-    text-align: center;
-    display: none; /* Hidden by default, will be toggled by JS if you add a hamburger menu */
+  .mobile-header .logo {
+      font-size: 1.5rem;
+      color: var(--accent); /* Ensure logo color is visible */
+      z-index: 101; /* Ensure logo is above other elements */
   }
 
-  .nav-links.active {
-    display: flex; /* Show when active (e.g., from a hamburger menu click) */
+  /* Hamburger Icon Styles */
+  .hamburger {
+      display: flex; /* Show hamburger on mobile */
+      flex-direction: column;
+      justify-content: space-around;
+      width: 2rem;
+      height: 2rem;
+      cursor: pointer;
+      z-index: 101; /* Ensure it's clickable and visible */
+      position: relative;
+      padding: 0.5rem; /* Padding around the bars to make them easier to click and less cornered */
+      box-sizing: content-box; /* Padding adds to size, not reduces bars */
+      /* Optional: If you want a subtle background behind the hamburger only */
+      /* background: rgba(0,0,0,0.5); */
+      /* border-radius: 5px; */
   }
 
-  .nav-links a {
-    padding: 0.75rem 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator for menu items */
-    width: 100%;
+  .hamburger .bar {
+      width: 2rem;
+      height: 3px;
+      background-color: var(--accent); /* Use your accent color for bars */
+      border-radius: 5px;
+      transition: all 0.3s ease-in-out;
   }
 
-  .nav-links a::after {
-    display: none; /* Hide hover underline on mobile to avoid clutter */
+  /* Hamburger to X animation */
+  .hamburger.active .bar:nth-child(1) { transform: translateY(9px) rotate(45deg); }
+  .hamburger.active .bar:nth-child(2) { opacity: 0; }
+  .hamburger.active .bar:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
+
+
+  /* --- Mobile Full-screen Navigation Overlay Menu --- */
+  .mobile-nav-overlay {
+      display: flex; /* Ensure it starts as flex so it can transition */
+      position: fixed;
+      top: 0;
+      left: -100%; /* Start off-screen to the left (slides in) */
+      width: 100%; /* Full width of the viewport */
+      height: 100%; /* Full height of the viewport */
+      background: rgba(0, 0, 0, 0.98); /* Very dark, almost opaque background for the menu itself */
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      z-index: 99; /* Below hamburger/mobile header, above content/overlay */
+      justify-content: center; /* Center content horizontally */
+      align-items: center; /* Center content vertically */
+      transition: left 0.4s ease-in-out; /* Smooth slide in animation */
+      opacity: 0; /* KEY CHANGE: Start transparent */
+      pointer-events: none; /* KEY CHANGE: Not interactive when hidden */
   }
 
-  .btn1 {
-    position: static; /* Remove absolute positioning */
-    left: auto;
-    margin-top: 1rem; /* Space from other elements */
-    width: 100%;
-    text-align: center;
+  .mobile-nav-overlay.active {
+      left: 0; /* Slide into view */
+      opacity: 1; /* Fade in */
+      pointer-events: auto; /* Allow interaction when active */
   }
 
+  .mobile-nav-content {
+      text-align: center; /* Center text within the menu */
+      width: 80%; /* Max width for content inside overlay */
+      max-width: 400px; /* Limit menu width for larger mobile devices */
+      padding-top: 60px; /* Offset for the fixed mobile header to avoid overlap */
+  }
+
+  .mobile-nav-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column; /* Stack links vertically */
+      gap: 1.5rem; /* Space between links */
+  }
+
+  .mobile-nav-links li {
+      margin: 0;
+  }
+
+  .mobile-nav-links a {
+      color: var(--text); /* White text color for links */
+      font-size: 2rem; /* Large font size for menu links */
+      text-decoration: none; /* Remove underline */
+      padding: 0.5rem 0;
+      display: block; /* Make links block level for full clickable area */
+      transition: color 0.3s;
+  }
+
+  .mobile-nav-links a:hover {
+      color: var(--accent); /* Accent color on hover */
+  }
+
+  .mobile-nav-links .btn {
+      margin-top: 2rem;
+      display: inline-block; /* Keeps button on its own line, allows centering */
+      padding: 1rem 3rem; /* Tweak: Increased horizontal padding for mobile dropdown button */
+  }
+
+
+  /* Overlay for dimming background (behind mobile menu) */
+  .overlay {
+      display: block; /* Needs to be block to transition opacity */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+      z-index: 98; /* Below mobile-nav-overlay, above content */
+      opacity: 0; /* KEY CHANGE: Start transparent */
+      pointer-events: none; /* KEY CHANGE: Not interactive when hidden */
+      transition: opacity 0.4s ease-in-out; /* Smooth fade in */
+  }
+  .overlay.active {
+      opacity: 1; /* Fade in when active */
+      pointer-events: auto; /* Allow interaction when active */
+  }
+
+  /* General Body Adjustments for Mobile */
+  body {
+      padding-top: 60px; /* Add padding to body to prevent content from hiding under fixed mobile header */
+      overflow-x: hidden; /* Ensure horizontal overflow is hidden */
+  }
+
+  /* --- General Section Adjustments for Mobile (Keeping previous responsive tweaks) --- */
   .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 2rem 1rem; /* Adjust padding */
-    height: auto; /* Allow height to adjust based on content */
-    min-height: 100vh; /* Ensure it takes at least viewport height */
-    justify-content: center; /* Center content vertically */
+      flex-direction: column;
+      text-align: center;
+      padding: 2rem 1rem;
+      height: auto;
+      min-height: calc(100vh - 60px); /* Adjust min-height for mobile header */
+      justify-content: center;
   }
 
   .hero-content h1 {
-    font-size: 3rem; /* Smaller font size for headlines */
-    line-height: 1.2;
-    text-align: center; /* Center text on mobile */
+      font-size: 3rem;
+      line-height: 1.2;
+      text-align: center;
   }
 
   .hero-content img {
-    max-width: 80%; /* Adjust image size */
-    margin: 10px auto 20px; /* Center image */
+      max-width: 80%;
+      margin: 10px auto 20px;
   }
 
   .hero-content p {
-    font-size: 1.2rem; /* Smaller paragraph text */
-    line-height: 1.6;
-    margin: 1rem 0;
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin: 1rem 0;
   }
 
   .btn {
-    padding: 0.8rem 2rem; /* Adjust button padding */
-    font-size: 1.2rem; /* Adjust button font size */
+      padding: 0.8rem 2rem;
+      font-size: 1.2rem;
   }
 
   .hero-visual {
-    max-width: 80%; /* Adjust visual container width */
-    margin-top: 2rem; /* Space between content and visual */
+      max-width: 80%;
+      margin-top: 2rem;
   }
 
   .portrait {
-    width: 250px; /* Smaller portrait size */
-    height: 250px;
-    translate: 0%; /* Reset translation */
-    animation: subtleWiggle 2s ease-in-out infinite; /* Adjust animation for mobile */
+      width: 250px;
+      height: 250px;
+      translate: 0%;
+      animation: subtleWiggle 2s ease-in-out infinite;
   }
 
-  /* Projects Section */
   .projects .swiper-container {
-    padding-bottom: 1rem;
+      padding-bottom: 1rem;
   }
 
   .projects img {
-    width: 100%; /* Make project images take full width */
-    height: auto;
+      width: 100%;
+      height: auto;
   }
 
-  /* Animations Section */
   .popup-trigger video {
-    max-width: 100%; /* Make videos take full width */
+      max-width: 100%;
   }
 
   .popup-video {
-    width: 100% !important; /* Ensure popup video is responsive */
-    height: auto;
+      width: 100% !important;
+      height: auto;
   }
 
-  /* Packages Section */
   .package-wrapper {
-    flex-direction: column; /* Stack packages vertically */
-    align-items: center; /* Center packages */
-    gap: 20px; /* Adjust gap between packages */
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
   }
 
   .package-container {
-    width: 90%; /* Make packages wider on mobile */
-    max-width: 350px; /* Limit max width for larger phones */
+      width: 90%;
+      max-width: 350px;
   }
 
-  /* About Section */
   .about-grid {
-    grid-template-columns: 1fr; /* Stack about content vertically */
-    gap: 1.5rem;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
   }
 
   .about-grid img {
-    max-width: 100% !important; /* Ensure image is fully responsive */
-    width: 100% !important;
-    height: auto;
+      max-width: 100% !important;
+      width: 100% !important;
+      height: auto;
   }
 
-  /* Sections */
   .section {
-    padding: 3rem 1rem; /* Adjust section padding */
+      padding: 3rem 1rem;
   }
 
   .section h2 {
-    font-size: 2rem; /* Smaller heading size */
-    margin-bottom: 1.5rem;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
   }
 
-  /* Footer */
   footer {
-    padding: 1.5rem;
+      padding: 1.5rem;
   }
 }
 
-/* Even smaller screens (e.g., old iPhones, very small devices) */
+/* --- Adjustments for very small screens (e.g., iPhone SE) --- */
 @media (max-width: 480px) {
   .hero-content h1 {
-    font-size: 2.5rem;
+      font-size: 2.5rem;
   }
 
   .hero-content p {
-    font-size: 1rem;
+      font-size: 1rem;
   }
 
   .portrait {
-    width: 200px;
-    height: 200px;
+      width: 200px;
+      height: 200px;
   }
 
-  .btn, .btn1 {
-    font-size: 1rem;
-    padding: 0.7rem 1.5rem;
+  .btn1 {
+      font-size: 1rem;
+      padding: 0.7rem 1.5rem;
   }
-}
+  /* Removed the problematic .btn rule here */
 
-/* Optional: Add a hamburger menu for navigation on mobile */
-/* You would need to add a button in your HTML for this and some JS to toggle the 'active' class on .nav-links */
-
-/* Example CSS for a hamburger icon (add this if you decide to implement it) */
-/*
-.menu-toggle {
-  display: none; // Hidden by default
-  flex-direction: column;
-  justify-content: space-around;
-  width: 2rem;
-  height: 2rem;
-  cursor: pointer;
-  z-index: 11; // Above navbar
-}
-
-.menu-toggle div {
-  width: 2rem;
-  height: 0.25rem;
-  background-color: var(--text);
-  border-radius: 10px;
-  transition: all 0.3s linear;
-  transform-origin: 1px;
-}
-
-@media (max-width: 768px) {
-  .menu-toggle {
-    display: flex; // Show on small screens
+  .mobile-header {
+      padding: 1rem; /* Slightly less padding on very small screens */
   }
 
-  .navbar .nav-links {
-    display: none; // Hide by default
-    // Other styles for mobile nav links
+  .mobile-nav-links a {
+      font-size: 1.7rem; /* Slightly smaller font for very tiny screens */
   }
 
-  // Styles for active state (e.g., when hamburger is clicked)
-  .menu-toggle.open .bar1 {
-    transform: rotate(45deg);
-  }
-
-  .menu-toggle.open .bar2 {
-    opacity: 0;
-  }
-
-  .menu-toggle.open .bar3 {
-    transform: rotate(-45deg);
+  /* Specific padding for the mobile dropdown button on very small screens */
+  .mobile-nav-links .btn {
+      padding: 0.8rem 2.5rem; /* Adjusted for smaller screens */
+      font-size: 1.2rem; /* Ensure font size is good here too */
   }
 }
-*/

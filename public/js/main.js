@@ -227,3 +227,147 @@ document.addEventListener('DOMContentLoaded', function() {
   // Start the initial typewriter effect after a delay
   setTimeout(typeWriter, delayBeforeStart);
 });
+// --- Hamburger Menu Logic ---
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburger = document.getElementById('hamburgerMenu');
+    const mobileNavOverlay = document.getElementById('mobileNavOverlay'); // The new full-screen menu
+    const fullScreenOverlay = document.getElementById('fullScreenOverlay'); // The background dimmer
+
+    if (hamburger && mobileNavOverlay && fullScreenOverlay) { // Ensure elements exist
+        hamburger.addEventListener('click', function() {
+            hamburger.classList.toggle('active');
+            mobileNavOverlay.classList.toggle('active');
+            fullScreenOverlay.classList.toggle('active');
+            // Prevent body scrolling when menu is open
+            document.body.style.overflow = mobileNavOverlay.classList.contains('active') ? 'hidden' : '';
+        });
+
+        // Close menu when a nav link inside the mobile overlay is clicked
+        mobileNavOverlay.querySelectorAll('.mobile-nav-links a').forEach(link => {
+            link.addEventListener('click', function(event) {
+                // Check if the link is an anchor to a section
+                if (this.getAttribute('href').startsWith('#')) {
+                    event.preventDefault(); // Prevent default jump for smooth scroll
+
+                    hamburger.classList.remove('active');
+                    mobileNavOverlay.classList.remove('active');
+                    fullScreenOverlay.classList.remove('active');
+                    document.body.style.overflow = ''; // Re-enable scrolling
+
+                    // Smooth scroll to section
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - (document.querySelector('.mobile-header')?.offsetHeight || 0), // Adjust for fixed header
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    // For external links or other behaviors, let the default action happen
+                    hamburger.classList.remove('active');
+                    mobileNavOverlay.classList.remove('active');
+                    fullScreenOverlay.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Close menu when fullScreenOverlay is clicked
+        fullScreenOverlay.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            mobileNavOverlay.classList.remove('active');
+            fullScreenOverlay.classList.remove('active');
+            document.body.style.overflow = ''; // Re-enable scrolling
+        });
+    }
+
+    // --- Your existing particles-js, typewriter, and swiper initialization should follow here ---
+
+    // Typewriter effect (make sure it targets the correct element)
+    const typewriterText = document.getElementById('typewriter-text');
+    const textToType = "I create stunning visual content that not only looks great but also converts. From engaging animations to captivating social media designs, I bring your brand's vision to life with creativity and precision.";
+    let i = 0;
+    let isDeleting = false;
+    let speed = 50; // Typing speed in ms
+
+    function typeWriter() {
+        if (!typewriterText) return; // Exit if element not found
+
+        let currentText = textToType.substring(0, i);
+        typewriterText.innerHTML = currentText;
+
+        if (!isDeleting && i < textToType.length) {
+            i++;
+            speed = 50; // Normal typing speed
+        } else if (isDeleting && i > 0) {
+            i--;
+            speed = 30; // Faster deleting speed
+        } else if (!isDeleting && i === textToType.length) {
+            return; // Stop after typing once if you don't want deletion
+        } else if (isDeleting && i === 0) {
+            isDeleting = false;
+            speed = 500; // Pause before typing again
+        }
+        setTimeout(typeWriter, speed);
+    }
+
+    typeWriter();
+
+    // Swiper initialization (ensure this is placed correctly)
+    var mySwiper = new Swiper('.swiper-container', {
+        loop: true,
+        slidesPerView: 1, // Show one slide at a time
+        spaceBetween: 30, // Space between slides
+        autoplay: {
+            delay: 3000,
+            disableOnInteraction: false,
+        },
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        breakpoints: {
+            // When window width is >= 769px (desktop)
+            769: {
+                slidesPerView: 3, // Show 3 slides on desktop
+                spaceBetween: 30,
+            },
+            // When window width is between 481px and 768px (tablet)
+            481: {
+                slidesPerView: 2, // Show 2 slides on tablet
+                spaceBetween: 20,
+            }
+        }
+    });
+
+    // Popup Video Logic
+    const videoPopup = document.getElementById('video-popup');
+    const popupPlayer = document.getElementById('popup-player');
+    const videoPopupClose = document.getElementById('video-popup-close');
+    const popupTriggers = document.querySelectorAll('.popup-video');
+
+    popupTriggers.forEach(trigger => {
+        trigger.addEventListener('click', function() {
+            const videoSrc = this.querySelector('source').src; // Get video source from clicked video
+            popupPlayer.src = videoSrc;
+            videoPopup.style.display = 'flex'; // Show the popup
+            popupPlayer.play(); // Autoplay the video in popup
+        });
+    });
+
+    videoPopupClose.addEventListener('click', function() {
+        videoPopup.style.display = 'none'; // Hide the popup
+        popupPlayer.pause(); // Pause the video
+        popupPlayer.currentTime = 0; // Reset video to start
+    });
+
+    // Close popup if clicked outside video content
+    videoPopup.addEventListener('click', function(event) {
+        if (event.target === videoPopup) {
+            videoPopup.style.display = 'none';
+            popupPlayer.pause();
+            popupPlayer.currentTime = 0;
+        }
+    });
+});
