@@ -375,3 +375,226 @@ footer {
     cursor: auto; /* Show default cursor on mobile */
   }
 }
+
+/* Add these new media queries to your css/style.css file */
+
+@media (max-width: 768px) {
+  /* General adjustments for screens up to 768px wide */
+  body {
+    padding-top: 50px; /* Adjust for fixed navbar on smaller screens */
+  }
+
+  .navbar {
+    flex-direction: column;
+    padding: 1rem;
+    align-items: flex-start;
+    border-radius: 0; /* Remove rounded corners for full-width on mobile */
+    background: rgba(0, 0, 0, 0.9); /* Slightly more opaque background for readability */
+  }
+
+  .navbar .logo {
+    margin-bottom: 0.5rem;
+  }
+
+  .nav-links {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+    text-align: center;
+    display: none; /* Hidden by default, will be toggled by JS if you add a hamburger menu */
+  }
+
+  .nav-links.active {
+    display: flex; /* Show when active (e.g., from a hamburger menu click) */
+  }
+
+  .nav-links a {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separator for menu items */
+    width: 100%;
+  }
+
+  .nav-links a::after {
+    display: none; /* Hide hover underline on mobile to avoid clutter */
+  }
+
+  .btn1 {
+    position: static; /* Remove absolute positioning */
+    left: auto;
+    margin-top: 1rem; /* Space from other elements */
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1rem; /* Adjust padding */
+    height: auto; /* Allow height to adjust based on content */
+    min-height: 100vh; /* Ensure it takes at least viewport height */
+    justify-content: center; /* Center content vertically */
+  }
+
+  .hero-content h1 {
+    font-size: 3rem; /* Smaller font size for headlines */
+    line-height: 1.2;
+    text-align: center; /* Center text on mobile */
+  }
+
+  .hero-content img {
+    max-width: 80%; /* Adjust image size */
+    margin: 10px auto 20px; /* Center image */
+  }
+
+  .hero-content p {
+    font-size: 1.2rem; /* Smaller paragraph text */
+    line-height: 1.6;
+    margin: 1rem 0;
+  }
+
+  .btn {
+    padding: 0.8rem 2rem; /* Adjust button padding */
+    font-size: 1.2rem; /* Adjust button font size */
+  }
+
+  .hero-visual {
+    max-width: 80%; /* Adjust visual container width */
+    margin-top: 2rem; /* Space between content and visual */
+  }
+
+  .portrait {
+    width: 250px; /* Smaller portrait size */
+    height: 250px;
+    translate: 0%; /* Reset translation */
+    animation: subtleWiggle 2s ease-in-out infinite; /* Adjust animation for mobile */
+  }
+
+  /* Projects Section */
+  .projects .swiper-container {
+    padding-bottom: 1rem;
+  }
+
+  .projects img {
+    width: 100%; /* Make project images take full width */
+    height: auto;
+  }
+
+  /* Animations Section */
+  .popup-trigger video {
+    max-width: 100%; /* Make videos take full width */
+  }
+
+  .popup-video {
+    width: 100% !important; /* Ensure popup video is responsive */
+    height: auto;
+  }
+
+  /* Packages Section */
+  .package-wrapper {
+    flex-direction: column; /* Stack packages vertically */
+    align-items: center; /* Center packages */
+    gap: 20px; /* Adjust gap between packages */
+  }
+
+  .package-container {
+    width: 90%; /* Make packages wider on mobile */
+    max-width: 350px; /* Limit max width for larger phones */
+  }
+
+  /* About Section */
+  .about-grid {
+    grid-template-columns: 1fr; /* Stack about content vertically */
+    gap: 1.5rem;
+  }
+
+  .about-grid img {
+    max-width: 100% !important; /* Ensure image is fully responsive */
+    width: 100% !important;
+    height: auto;
+  }
+
+  /* Sections */
+  .section {
+    padding: 3rem 1rem; /* Adjust section padding */
+  }
+
+  .section h2 {
+    font-size: 2rem; /* Smaller heading size */
+    margin-bottom: 1.5rem;
+  }
+
+  /* Footer */
+  footer {
+    padding: 1.5rem;
+  }
+}
+
+/* Even smaller screens (e.g., old iPhones, very small devices) */
+@media (max-width: 480px) {
+  .hero-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .hero-content p {
+    font-size: 1rem;
+  }
+
+  .portrait {
+    width: 200px;
+    height: 200px;
+  }
+
+  .btn, .btn1 {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+  }
+}
+
+/* Optional: Add a hamburger menu for navigation on mobile */
+/* You would need to add a button in your HTML for this and some JS to toggle the 'active' class on .nav-links */
+
+/* Example CSS for a hamburger icon (add this if you decide to implement it) */
+/*
+.menu-toggle {
+  display: none; // Hidden by default
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  z-index: 11; // Above navbar
+}
+
+.menu-toggle div {
+  width: 2rem;
+  height: 0.25rem;
+  background-color: var(--text);
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  transform-origin: 1px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex; // Show on small screens
+  }
+
+  .navbar .nav-links {
+    display: none; // Hide by default
+    // Other styles for mobile nav links
+  }
+
+  // Styles for active state (e.g., when hamburger is clicked)
+  .menu-toggle.open .bar1 {
+    transform: rotate(45deg);
+  }
+
+  .menu-toggle.open .bar2 {
+    opacity: 0;
+  }
+
+  .menu-toggle.open .bar3 {
+    transform: rotate(-45deg);
+  }
+}
+*/
